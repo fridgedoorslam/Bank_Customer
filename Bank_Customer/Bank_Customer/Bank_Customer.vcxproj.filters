@@ -88,5 +88,8 @@
     <Text Include="accounts_input.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="login_information.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

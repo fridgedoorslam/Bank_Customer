@@ -24,7 +24,7 @@ int main() {
 	bank.calculateFees();
 	bank.calculateInterest();
 
-	//Display main menu
-	bank.main_menu();
+	//Display login menu
+	bank.login_menu();
 	return 0;
 }

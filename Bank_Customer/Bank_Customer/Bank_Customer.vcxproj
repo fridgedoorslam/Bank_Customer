@@ -104,6 +104,7 @@
     <Text Include="account_association.txt" />
     <Text Include="accounts_input.txt" />
     <Text Include="customer_input.txt" />
+    <Text Include="login_information.txt" />
     <Text Include="transactions_input.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -43,8 +43,10 @@ public:
 
 	//Creation Functions
 	void welcome_menu();
+	void login_menu();
 	void main_menu();
 	int get_input();
+	bool customer_validification(int, std::string);
 	void customer_input_menu();
 	void account_input_menu();
 	void transaction_input_menu();
@@ -53,6 +55,7 @@ public:
 	void account_association_menu();
 	void print_total();
 	void customer_summary_menu();
+	void customer_payment();
 
 private:
 	Date current_date;
