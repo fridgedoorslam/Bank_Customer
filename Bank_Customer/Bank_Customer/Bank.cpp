@@ -186,6 +186,7 @@ void Bank::welcome_menu() {
 
 void Bank::login_menu() {
 	cout << "Before viewing your information we need you to login." << endl;
+	cout << "Note: Password is case-senstive" << endl;
 	int customer_id;
 	string customer_password;
 	cout << "Please enter your customer number. "; 	cin >> customer_id;
@@ -203,240 +204,23 @@ void Bank::login_menu() {
 //Main Menu
 void Bank::main_menu() {
 	cout << "--Main Menu--" << endl;
-	cout << "Enter 1 to add a new customer." << endl;
-	cout << "Enter 2 to add a new account." << endl;
-	cout << "Enter 3 to add a transaction to an existing account." << endl;
-	cout << "Enter 4 to view customer information." << endl;
-	cout << "Enter 5 to associate accounts." << endl;
-	cout << "Enter 6 to print customer account statements." << endl;
-	cout << "Enter 7 to print total values of a certain account." << endl;
-	cout << "Enter 8 to print customer totals." << endl;
-	cout << "Enter 9 to make payment on your loan." << endl;
+	cout << "Enter 1 to view your monthly statement." << endl;
+	cout << "Enter 2 to view total of an account." << endl;
+	cout << "Enter 3 to make a payment on your loan." << endl;
 	cout << "Enter 0 to exit application." << endl;
 	int option = get_input();
 	switch (option) {
 	case 0:
 		exit(0);
 	case 1:
-		customer_input_menu();
-	case 2:
-		account_input_menu();
-	case 3:
-		transaction_input_menu();
-	case 4:
-		customer_info_menu();
-	case 5:
-		account_association_menu();
-	case 6:
 		print_customer_statements();
-	case 7:
-		print_total();
-	case 8:
-		customer_summary_menu();
-	case 9:
+	case 2:
+		customer_total();
+	case 3:
 		customer_payment();
 	}
 }
 
-//Customer Input Menu
-void Bank::customer_input_menu() {
-	cout << "--Customer Input Menu--" << endl << endl;
-	cout << "This menu will allow you to add a new customer to the bank." << endl << endl;
-	int new_id, new_ssn;
-	string new_first, new_last, new_address;
-	cout << "First Name: "; cin >> new_first;
-	cout << "Last Name: "; cin >> new_last;
-	cout << "Social Security Number: "; cin >> new_ssn;
-	cout << "Address: "; getline(cin, new_address); getline(cin, new_address);
-	//We should check if ID is valid and unused
-	cout << "Customer ID Number: "; cin >> new_id;
-	Customer* new_customer = new Customer(new_id, new_ssn, new_first, new_last, new_address);
-	pCustomers.push_back(new_customer);
-
-	//Adds new customer to customer text file
-	fstream newCustomer;
-	newCustomer.open("customer_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-	newCustomer << endl << new_id << " " << new_ssn << " " << new_first << " " << new_last << " " << new_address;
-	newCustomer.close();
-
-	cout << "Successfully added customer." << endl;
-	cout << "Enter 1 to add another customer." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
-
-	int option = get_input();
-	switch (option) {
-	case 0:
-		main_menu();
-	case 1:
-		customer_input_menu();
-	}
-}
-
-//Transaction Input Menu
-void Bank::transaction_input_menu() {
-	cout << "--Transaction Input Menu--" << endl << endl;
-	cout << "This menu will allow you to add a new transaction." << endl;
-	int account;
-	string type, info;
-	double amount;
-	Date date;
-	cout << "Account to apply to: "; cin >> account;
-	cout << "Transaction type (d or w): "; cin >> type;
-	cout << "Amount "; cin >> amount;
-	cout << "Date of transaction: "; cin >> date;
-	cout << "Description: "; getline(cin, info); getline(cin, info);
-	Transaction* new_transaction = new Transaction(account, type, amount, date, info);
-	pTransactions.push_back(new_transaction);
-
-	// Adds new transaction to transaction text file
-	fstream newTransaction;
-	newTransaction.open("transactions_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-	newTransaction << endl << account << " " << type << " " << amount << " " << date << " " << info;
-	newTransaction.close();
-
-	//Loop through accounts and store transaction pointer into proper one
-	vector<Account*>::const_iterator account_iter;
-	for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
-		if ((*account_iter)->getNumber() == account) {
-			(*account_iter)->setTransaction(new_transaction);
-		}
-	}
-
-	cout << "--Successfully added transaction--" << endl;
-	cout << "Enter 1 to add another transaction." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
-	int option = get_input();
-	switch (option) {
-	case 0:
-		main_menu();
-	case 1:
-		transaction_input_menu();
-	}
-}
-
-//Account Input Menu
-void Bank::account_input_menu() {
-	cout << "--Account Input Menu--" << endl << endl;
-	cout << "This menu will allow you to create a new account with opening balance" << endl;
-	//Variables
-	int number;
-	int type;
-	double balance;
-	double interestRate = 0.03;
-	Date date = current_date;
-	cout << "Please enter the type of account you would like." << endl;
-	cout << "	1. Checking" << endl;
-	cout << "	2. Savings" << endl;
-	cout << "	3. Certificate Deposit" << endl;
-	cout << "   4. Loan" << endl << endl;
-	cin >> type;
-	cout << "Please Enter New Account Number: "; cin >> number;
-	cout << "Please Enter Opening Balance: "; cin >> balance;
-	if (type == 1) {
-		Checking_Account* new_account = new Checking_Account(number, balance, date);
-		pAccounts.push_back(new_account);
-		//Adds new account to account text file
-		fstream newAccount;
-		newAccount.open("accounts_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-		newAccount << endl << type << " " << number << " " << balance << " " << date;
-		newAccount.close();
-	}
-	else if (type == 2){
-		Savings_Account* new_account = new Savings_Account(number, balance, date);
-		pAccounts.push_back(new_account);
-		//Adds new account to account text file
-		fstream newAccount;
-		newAccount.open("accounts_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-		newAccount << endl << type << " " << number << " " << balance << " " << date;
-		newAccount.close();
-	}
-	else if (type == 3) {
-		Date maturityDate;
-		cout << "What is the maturity date? " << endl;
-		cin >> maturityDate;
-		CD_Account* new_account = new CD_Account(number, balance, date, interestRate, maturityDate);
-		pAccounts.push_back(new_account);
-		//Adds new account to account text file
-		fstream newAccount;
-		newAccount.open("accounts_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-		newAccount << endl << type << " " << number << " " << balance << " " << date << " " << interestRate << " " << maturityDate;
-		newAccount.close();
-	}
-	else if (type == 4) {
-		balance = balance * -1;
-		Loan* new_account = new Loan(number, balance, date, interestRate);
-		pAccounts.push_back(new_account);
-		//Adds new account to account text file
-		fstream newAccount;
-		newAccount.open("accounts_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-		newAccount << endl << type << " " << number << " " << balance << " " << date << " " << interestRate << " ";
-		newAccount.close();
-	}
-
-	cout << "--Successfully added account--" << endl;
-	cout << "Enter 1 to add another account." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
-	int option = get_input();
-	switch (option) {
-	case 0:
-		main_menu();
-	case 1:
-		account_input_menu();
-	}
-}
-
-//Associate accounts
-void Bank::account_association_menu() {
-	int customerNumber, accountNumber;
-	vector<Customer*>::const_iterator customer_iter;
-	vector<Account*>::const_iterator account_iter;
-	cout << "--Account Association Menu--" << endl << endl;
-	cout << "This menu will allow you to create a customer" << endl;
-	cout << "number that is associated with given account number." << endl << endl;
-	cout << "Enter Customer Number: ";
-	cin >> customerNumber;
-	cout << "Enter an Account Number: ";
-	cin >> accountNumber;
-	//Loop through customers and add pointer to owner vector of proper account
-	for (customer_iter = pCustomers.begin(); customer_iter != pCustomers.end(); ++customer_iter) {
-		if ((*customer_iter)->getId() == customerNumber) {
-			Customer* pCustomer = (*customer_iter);
-			for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
-				if ((*account_iter)->getNumber() == customerNumber) {
-					(*account_iter)->setOwner(pCustomer);
-				}
-			}
-		}
-	}
-	//Loop through accounts and add pointer to account vector of proper customer
-	for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
-		if ((*account_iter)->getNumber() == accountNumber) {
-			Account* pAccount = (*account_iter);
-			for (customer_iter = pCustomers.begin(); customer_iter != pCustomers.end(); ++customer_iter) {
-				if ((*customer_iter)->getId() == customerNumber) {
-					(*customer_iter)->setAccount(pAccount);
-				}
-			}
-		}
-	}
-	// Adds new transaction to transaction text file
-	fstream newAssociation;
-	newAssociation.open("account_association.txt", std::fstream::in | std::fstream::out | std::fstream::app);
-	newAssociation << endl << customerNumber << " " << accountNumber;
-	newAssociation.close();
-
-	cout << endl << "Successfully associated customer number " << customerNumber << " with account number " << accountNumber << "." << endl << endl;
-	cout << "Enter 1 to add another account." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
-	int option = get_input();
-	switch (option) {
-	case 0:
-		cout << endl;
-		main_menu();
-	case 1:
-		account_association_menu();
-	}
-}
 
 
 //Customer Info Menu
@@ -456,7 +240,7 @@ void Bank::customer_info_menu() {
 //Print Customer Statements
 void Bank::print_customer_statements() {
 	int account_number, month, year;
-	cout << "--Print a Customer Statement--" << endl;
+	cout << "--Print a Monthly Statement--" << endl;
 	cout << "Enter Account Number: ";
 	cin >> account_number;
 	cout << "What Month (XX)? ";
@@ -502,67 +286,37 @@ void Bank::print_customer_statements() {
 	}
 }
 
-//Print account totals
-void Bank::print_total() {
-	int account_type;
+void Bank::customer_total() {
+	cout << "--View the Total of your Account--" << endl << endl;
+	cout << "This menu will allow you to view the total of any of your accounts." << endl;
+	int account;
 	double total = 0;
-	cout << "--Print Total Values--" << endl;
-	cout << "Enter 1 for Checking Accounts" << endl;
-	cout << "Enter 2 for Savings Accounts" << endl;
-	cout << "Enter 3 for CD Accounts" << endl;
-	cout << "Enter 4 for Loan Accounts" << endl;
-	cin >> account_type;
+	cout << "Account to view total of: "; cin >> account;
 	vector<Account*>::const_iterator account_iter;
-	vector<Transaction*>::const_iterator transaction_iter;
 	for (account_iter = pAccounts.begin();
 		account_iter != pAccounts.end(); ++account_iter) {
-		if ((*account_iter)->getType() == account_type) {
-			total += (*account_iter)->calculate_total();
-		}
-
-	}
-	cout << total << endl;
-	main_menu();
-}
-
-// Prints customer name and the total value of their accounts
-void Bank::customer_summary_menu() {
-	cout << "--Customer Summary Menu--" << endl << endl;
-	vector<Account*>::const_iterator account_iter;
-	vector<Customer*>::const_iterator iter;
-	for (iter = pCustomers.begin();
-		iter != pCustomers.end(); ++iter) {
-		cout << "Customer ID: " << (*iter)->getId() << " " << "Customer Name: " << (*iter)->getFirst() << " " << (*iter)->getLast() << endl;
-		for (account_iter = (*iter)->getAccounts().begin();
-			account_iter != (*iter)->getAccounts().end(); ++account_iter) {
-			double total = 0;
+		if ((*account_iter)->getNumber() == account) {
 			total += (*account_iter)->calculate_total();
 			cout << "Account Number: " << (*account_iter)->getNumber() << " " << " Account Total: $" << total << endl << endl;
 		}
+
 	}
-	cout << "--Customer Summary Complete--" << endl << endl;
-	cout << "Enter 1 to print the summary again." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
-	int option = get_input();
-	switch (option) {
-	case 0:
-		main_menu();
-	case 1:
-		customer_summary_menu();
-	}
+	main_menu();
 }
+
+
 
 
 void Bank::customer_payment() {
 	cout << "--Make a payment on your Loan--" << endl << endl;
-	cout << "This menu will allow you to add a new payment." << endl;
+	cout << "This menu will allow you to make a payment." << endl;
 	int account;
 	string type, info;
 	double amount;
 	Date date;
 	cout << "Account to apply to: "; cin >> account;
 	cout << "Amount "; cin >> amount;
-	cout << "Date of Payment: "; cin >> date;
+	date = current_date;
 	type = "d";
 	info = "Loan Payment";
 	Transaction* new_transaction = new Transaction(account, type, amount, date, info);
