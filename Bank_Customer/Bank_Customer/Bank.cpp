@@ -237,7 +237,7 @@ void Bank::customer_info_menu() {
 	main_menu();
 }
 
-//Print Customer Statements
+//View a statement for an account
 void Bank::print_customer_statements() {
 	int account_number, month, year;
 	cout << "--Print a Monthly Statement--" << endl;
@@ -275,7 +275,7 @@ void Bank::print_customer_statements() {
 		}
 	}
 	cout << "--End of Statement--" << endl << endl;
-	cout << "Enter 1 to print another customer statement" << endl;
+	cout << "Enter 1 view another monthly statement." << endl;
 	cout << "Enter 0 to return to the main menu." << endl;
 	int option = get_input();
 	switch (option) {
@@ -286,6 +286,7 @@ void Bank::print_customer_statements() {
 	}
 }
 
+// View the total of an account
 void Bank::customer_total() {
 	cout << "--View the Total of your Account--" << endl << endl;
 	cout << "This menu will allow you to view the total of any of your accounts." << endl;
@@ -305,8 +306,7 @@ void Bank::customer_total() {
 }
 
 
-
-
+//Make a payment on a loan
 void Bank::customer_payment() {
 	cout << "--Make a payment on your Loan--" << endl << endl;
 	cout << "This menu will allow you to make a payment." << endl;
