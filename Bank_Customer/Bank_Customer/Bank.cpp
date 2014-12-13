@@ -186,7 +186,7 @@ void Bank::welcome_menu() {
 
 void Bank::login_menu() {
 	cout << "Before viewing your information we need you to login." << endl;
-	cout << "Note: Password is case-senstive" << endl;
+	cout << "Note: Password is case-senstive" << endl << endl;
 	int customer_id;
 	string customer_password;
 	cout << "Please enter your customer number. "; 	cin >> customer_id;
@@ -240,8 +240,9 @@ void Bank::customer_info_menu() {
 //View a statement for an account
 void Bank::print_customer_statements() {
 	int account_number, month, year;
-	cout << "--Print a Monthly Statement--" << endl;
-	cout << "Enter Account Number: ";
+	cout << "--View Your Monthly Statement--" << endl;
+	cout << "This menu will allow you to view current and all past monthly statements." << endl;
+	cout << "Enter Your Account Number: ";
 	cin >> account_number;
 	cout << "What Month (XX)? ";
 	cin >> month;
@@ -275,8 +276,8 @@ void Bank::print_customer_statements() {
 		}
 	}
 	cout << "--End of Statement--" << endl << endl;
-	cout << "Enter 1 view another monthly statement." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
+	cout << "Enter 1 View Another Monthly Statement." << endl;
+	cout << "Enter 0 to Return to the Main Menu." << endl;
 	int option = get_input();
 	switch (option) {
 	case 0:
@@ -288,7 +289,7 @@ void Bank::print_customer_statements() {
 
 // View the total of an account
 void Bank::customer_total() {
-	cout << "--View the Total of your Account--" << endl << endl;
+	cout << "--View the Total of Your Account--" << endl << endl;
 	cout << "This menu will allow you to view the total of any of your accounts." << endl;
 	int account;
 	double total = 0;
@@ -300,22 +301,30 @@ void Bank::customer_total() {
 			total += (*account_iter)->calculate_total();
 			cout << "Account Number: " << (*account_iter)->getNumber() << " " << " Account Total: $" << total << endl << endl;
 		}
-
 	}
-	main_menu();
+	cout << "--Successfully Viewed Account Total--" << endl << endl;
+	cout << "Enter 1 View Another Total for a Different Account." << endl;
+	cout << "Enter 0 to Return to the Main Menu." << endl;
+	int option = get_input();
+	switch (option) {
+	case 0:
+		main_menu();
+	case 1:
+		customer_total();
+	}
 }
 
 
 //Make a payment on a loan
 void Bank::customer_payment() {
-	cout << "--Make a payment on your Loan--" << endl << endl;
-	cout << "This menu will allow you to make a payment." << endl;
+	cout << "--Make a Payment on Your Loan--" << endl << endl;
+	cout << "This menu will allow you to make a payment on your loan." << endl;
 	int account;
 	string type, info;
 	double amount;
 	Date date;
 	cout << "Account to apply to: "; cin >> account;
-	cout << "Amount "; cin >> amount;
+	cout << "Amount: $"; cin >> amount;
 	date = current_date;
 	type = "d";
 	info = "Loan Payment";
@@ -336,9 +345,9 @@ void Bank::customer_payment() {
 		}
 	}
 
-	cout << "--Successfully added Payment--" << endl;
-	cout << "Enter 1 to add another Payment." << endl;
-	cout << "Enter 0 to return to the main menu." << endl;
+	cout << "--Successfully Added Payment--" << endl;
+	cout << "Enter 1 to Add Another Payment." << endl;
+	cout << "Enter 0 to Return to the Main Menu." << endl;
 	int option = get_input();
 	switch (option) {
 	case 0:
