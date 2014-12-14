@@ -2,26 +2,17 @@
 
 //Getters
 const vector<Customer*>& Bank::getCustomers() const { return pCustomers; } //Changed to const for iter
-
 const vector<Account*>& Bank::getAccounts() const { return pAccounts; } //Changed to const for
-
 const vector<Transaction*>& Bank::getTransactions() const { return pTransactions; }
-
 Date Bank::getCurrentDate() { return current_date; }
-
 const int Bank::getCurrentUser() const { return current_user; }
 
 //Setters
 void Bank::setCustomer(Customer* Customer) { pCustomers.push_back(Customer); }
-
 void Bank::setAccount(Account* Account) { pAccounts.push_back(Account); }
-
 void Bank::setTransaction(Transaction* Transaction) { pTransactions.push_back(Transaction); }
-
 void Bank::setCurrentDate(Date currentDate) { current_date = currentDate; }
-
 void Bank::setCurrentUser(int customer_id) { current_user = customer_id; }
-
 
 //File Reading Functions
 
@@ -57,13 +48,13 @@ void Bank::readTransactions() {
 	while (!transaction_file.eof()) {
 		transaction_file >> pTransactions;
 	}
+
 	//Loop through transaction pointers and store into proper account
 	vector<Transaction*>::const_iterator transaction_iter;
 	vector<Account*>::const_iterator account_iter;
 	for (transaction_iter = pTransactions.begin();
 		transaction_iter != pTransactions.end(); ++transaction_iter) {
 		int transaction_account = (*transaction_iter)->getAccount();
-
 		for (account_iter = pAccounts.begin();
 			account_iter != pAccounts.end(); ++account_iter) {
 			int account = (*account_iter)->getNumber();
@@ -80,6 +71,7 @@ void Bank::readAssociation() {
 	if (!association_file) {
 		cout << "account_association.txt not found." << endl;
 	}
+
 	//Create Iterators
 	vector<Customer*>::const_iterator customer_iter;
 	vector<Account*>::const_iterator account_iter;
@@ -135,6 +127,7 @@ void Bank::calculateFees() {
 	}
 }
 
+//Adds interest transaction objects to appropriate accounts
 void Bank::calculateInterest() {
 	vector<Account*>::const_iterator account_iter;
 	for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
@@ -145,7 +138,8 @@ void Bank::calculateInterest() {
 			for (int i = 0; i < months; i++) {
 				int day = calculateDays(month);
 				Date interest_date = Date(day, month, year, '/');
-				//Hard coding this shit, change it later
+
+				// We hard coded an interest rate of 3%
 				double interest = (*account_iter)->calculate_total() * (0.03 / 12);
 				Transaction* new_transaction = new Transaction((*account_iter)->getNumber(), "d", interest, interest_date, "Monthly Interest");
 				(*account_iter)->setTransaction(new_transaction);
@@ -156,6 +150,7 @@ void Bank::calculateInterest() {
 	}
 }
 
+//Checks to see if the user has the right login information
 bool Bank::credential_validation(int id, string password) {
 	int customer_id;
 	string customer_password;
@@ -176,6 +171,7 @@ bool Bank::credential_validation(int id, string password) {
 
 //Menu Functions
 
+//Welcomes user and also will grab the current date from their system's clock
 void Bank::welcome_menu() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
@@ -188,13 +184,14 @@ void Bank::welcome_menu() {
 	cout << "Today's date is " << current_date << endl << endl;
 }
 
+//Allows the user to log in to their personal account
 void Bank::login_menu() {
 	cout << "Before viewing your information we need you to login." << endl;
 	cout << "Note: Password is case-senstive" << endl << endl;
 	int customer_id;
 	string customer_password;
-	cout << "Please enter your customer number. "; 	cin >> customer_id;
-	cout << "Please enter your password. ";  cin >> customer_password;
+	cout << "Please enter your customer number: "; 	cin >> customer_id;
+	cout << "Please enter your password: ";  cin >> customer_password;
 	if (credential_validation(customer_id, customer_password)) {
 		setCurrentUser(customer_id);
 		main_menu();
@@ -202,11 +199,10 @@ void Bank::login_menu() {
 	else {
 		cout << "Invalid customer number/password" << endl;
 		login_menu();
-	}
-	
+	}	
 }
 
-//Main Menu
+//Main Menu allows user to select different menu options
 void Bank::main_menu() {
 	cout << "--Main Menu--" << endl;
 	cout << "Enter 1 to view your monthly statement." << endl;
@@ -229,8 +225,6 @@ void Bank::main_menu() {
 	}
 
 }
-
-
 
 //Customer Info Menu
 void Bank::customer_info_menu() {
@@ -269,7 +263,6 @@ void Bank::print_customer_statements() {
 				++transaction_iter) {
 				//Sort the transactions before they get printed
 				sort((*account_iter)->getTransactions().begin(), (*account_iter)->getTransactions().end(), sort_transactions);
-
 				if ((*transaction_iter)->getDate().getMonth() == month && (*transaction_iter)->getDate().getYear() == year) {
 					cout << (*transaction_iter)->getDate();
 					if ((*transaction_iter)->getType() == "d") {
@@ -333,7 +326,6 @@ void Bank::customer_total() {
 	}
 }
 
-
 //Make a payment on a loan
 void Bank::customer_payment() {
 	cout << "--Make a Payment on Your Loan--" << endl << endl;
@@ -365,8 +357,8 @@ void Bank::customer_payment() {
 	}
 
 	cout << "--Successfully Added Payment--" << endl;
-	cout << "Enter 1 to Add Another Payment." << endl;
-	cout << "Enter 0 to Return to the Main Menu." << endl;
+	cout << "Enter 1 to add another payment." << endl;
+	cout << "Enter 0 to return to the main menu." << endl;
 	int option = get_input();
 	switch (option) {
 	case 0:
@@ -376,6 +368,7 @@ void Bank::customer_payment() {
 	}
 }
 
+//Allows user to change their password
 void Bank::change_password() {
 	string line, old_password, new_password1, new_password2;
 	int customer_id;
@@ -398,11 +391,11 @@ void Bank::change_password() {
 			}
 			in.close();
 			out.close();
-			// delete original file
+			//Delete original file
 			remove("login_information.txt");
-			// rename old to new
+			//Rename old to new
 			rename("outfile.txt", "login_information.txt");
-			// Adds new password to login file
+			//Adds new password to login file
 			fstream newPassword;
 			newPassword.open("login_information.txt", std::fstream::in | std::fstream::out | std::fstream::app);
 			newPassword << customer_id << " " << new_password1;
@@ -410,7 +403,7 @@ void Bank::change_password() {
 			cout << "--Successfully Changed Password--" << endl;
 		}
 		else {
-			cout << "The passwords you entered to not match please try again" << endl;
+			cout << "The password you entered to not match your first password entry. Please try again." << endl;
 			change_password();
 		}
 	}
