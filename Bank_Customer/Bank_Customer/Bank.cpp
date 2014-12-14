@@ -16,7 +16,7 @@ void Bank::setCustomer(Customer* Customer) { pCustomers.push_back(Customer); }
 
 void Bank::setAccount(Account* Account) { pAccounts.push_back(Account); }
 
-void Bank::setTransaction(Transaction* Transaction){ pTransactions.push_back(Transaction); }
+void Bank::setTransaction(Transaction* Transaction) { pTransactions.push_back(Transaction); }
 
 void Bank::setCurrentDate(Date currentDate) { current_date = currentDate; }
 
@@ -172,7 +172,6 @@ bool Bank::credential_validation(int id, string password) {
 		}
 	} 
 	return false;
-
 }
 
 //Menu Functions
@@ -386,9 +385,9 @@ void Bank::change_password() {
 	if (credential_validation(customer_id, old_password)) {
 		cout << "Please enter your new password: "; cin >> new_password1;
 		cout << "Please enter your new password again for verification: "; cin >> new_password2;
-		if (new_password1 == new_password2){
+		if (new_password1 == new_password2) {
 			ifstream in("login_information.txt");
-			if (!in.is_open()){
+			if (!in.is_open()) {
 				cout << "Input file failed to open \n";
 			}
 			ofstream out("outfile.txt");
