@@ -369,7 +369,9 @@ void Bank::customer_payment() {
 void Bank::change_password() {
 	string line, old_password, new_password1, new_password2;
 	int customer_id;
-	cout << "Please enter your customer ID: "; cin >> customer_id;
+	cout << "--Password Change Menu--" << endl << endl;
+	cout << "This menu will allow you to change your password." << endl << endl;
+	cout << "To make sure this is you, please enter your customer ID again: "; cin >> customer_id;
 	cout << "Please enter your old password: "; cin >> old_password;
 	string delete_line = to_string(customer_id) + " " + old_password;
 	if (credential_validation(customer_id, old_password)) {
@@ -397,7 +399,7 @@ void Bank::change_password() {
 			newPassword.open("login_information.txt", std::fstream::in | std::fstream::out | std::fstream::app);
 			newPassword << customer_id << " " << new_password1;
 			newPassword.close();
-			cout << "--Successfully Changed Password--" << endl;
+			cout << "--Successfully Changed Password--" << endl << endl;
 		}
 		else {
 			cout << "The password you entered to not match your first password entry. Please try again." << endl;
