@@ -40,6 +40,7 @@ private:
 	char slash;
 };
 
+//Other Functions
 int calculateDays(int);
 
 #endif

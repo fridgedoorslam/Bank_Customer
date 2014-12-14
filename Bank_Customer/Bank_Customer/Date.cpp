@@ -17,21 +17,15 @@ Date::Date(int Day, int Month, int Year, char Slash) {
 
 //Getters
 int Date::getDay() const { return day; }
-
 int Date::getMonth() const { return month; }
-
 int Date::getYear() const { return year; }
-
 char Date::getSlash() const { return slash; }
 
 //Setters
-void Date::setDay(int DAY){ day = DAY; }
-
-void Date::setMonth(int MONTH){ month = MONTH; }
-
-void Date::setYear(int YEAR){ year = YEAR; }
-
-void Date::setSlash(char SLASH){ slash = SLASH; }
+void Date::setDay(int Day) { day = Day; }
+void Date::setMonth(int Month) { month = Month; }
+void Date::setYear(int Year) { year = Year; }
+void Date::setSlash(char Slash) { slash = Slash; }
 
 
 //Operators
@@ -79,7 +73,7 @@ bool Date::operator<(const Date& date) const {
 }
 
 //Functions
-
+//Calculates which day a month ends on
 int calculateDays(int month) {
 	return (int)(28 + (month + (int)floor(month / 8)) % 2 + 2 % month + 2 * floor(1 / month));
 }
