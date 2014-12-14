@@ -138,8 +138,7 @@ void Bank::calculateInterest() {
 			for (int i = 0; i < months; i++) {
 				int day = calculateDays(month);
 				Date interest_date = Date(day, month, year, '/');
-
-				// We hard coded an interest rate of 3%
+				//Hard coding this shit, change it later
 				double interest = (*account_iter)->calculate_total() * (0.03 / 12);
 				Transaction* new_transaction = new Transaction((*account_iter)->getNumber(), "d", interest, interest_date, "Monthly Interest");
 				(*account_iter)->setTransaction(new_transaction);
@@ -190,8 +189,8 @@ void Bank::login_menu() {
 	cout << "Note: Password is case-senstive" << endl << endl;
 	int customer_id;
 	string customer_password;
-	cout << "Please enter your customer number: "; 	cin >> customer_id;
-	cout << "Please enter your password: ";  cin >> customer_password;
+	cout << "Please enter your customer number. "; 	cin >> customer_id;
+	cout << "Please enter your password. ";  cin >> customer_password;
 	if (credential_validation(customer_id, customer_password)) {
 		setCurrentUser(customer_id);
 		main_menu();
@@ -199,7 +198,7 @@ void Bank::login_menu() {
 	else {
 		cout << "Invalid customer number/password" << endl;
 		login_menu();
-	}	
+	}
 }
 
 //Main Menu allows user to select different menu options
@@ -233,7 +232,6 @@ void Bank::customer_info_menu() {
 	vector<Customer*>::const_iterator iter;
 	for (iter = pCustomers.begin();
 		iter != pCustomers.end(); ++iter) {
-		// We could probably overload an operator for this long bit
 		cout << (*iter)->getId() << " " << (*iter)->getSocial() << " " <<
 			(*iter)->getFirst() << " " << (*iter)->getLast() << " " << (*iter)->getAddress() << endl;
 	}
