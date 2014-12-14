@@ -7,8 +7,8 @@ Transaction::Transaction(){
 }
 
 //Constructor
-Transaction::Transaction(int number, const string Type, double Amount, const Date& TransDate, string Info) {
-	account_number = number;
+Transaction::Transaction(int Number, const string Type, double Amount, const Date& TransDate, string Info) {
+	account_number = Number;
 	type = Type;
 	amount = Amount;
 	transDate = TransDate;
@@ -41,34 +41,34 @@ void Transaction::setInfo(string Info) { info = Info; }
 //Operators
 
 //Input Operator
-istream& operator>>(istream& input, vector<Transaction*>& vector) {
+istream& operator>>(istream& Input, vector<Transaction*>& Vector) {
 	int account;
 	string type, info;
 	double amount;
 	Date date;
-	input >> account >> type >> amount >> date;
-	input >> std::ws;
-	getline(input, info);
+	Input >> account >> type >> amount >> date;
+	Input >> std::ws;
+	getline(Input, info);
 	Transaction* new_transaction = new Transaction(account, type, amount, date, info);
-	vector.push_back(new_transaction);
-	return input;
+	Vector.push_back(new_transaction);
+	return Input;
 }
 
 //Output Operator
-ostream& operator<<(ostream& output, const Transaction& transaction) {
-	output << transaction.getDate();
-	if (transaction.getType() == "d") {
-		cout << " Deposit, $" << transaction.getAmount() << " from" << transaction.getInfo() << ".";
+ostream& operator<<(ostream& Output, const Transaction& Transaction) {
+	Output << Transaction.getDate();
+	if (Transaction.getType() == "d") {
+		cout << " Deposit, $" << Transaction.getAmount() << " from" << Transaction.getInfo() << ".";
 	}
 	else {
-		cout << " Withdrawal, $" << transaction.getAmount() << " to" << transaction.getInfo() << ".";
+		cout << " Withdrawal, $" << Transaction.getAmount() << " to" << Transaction.getInfo() << ".";
 	}
-	return output;
+	return Output;
 }
 
 //Less than Operator
-bool Transaction::operator<(const Transaction& transaction) const {
-	if (getDate() < transaction.getDate()) { return true; }
-	else if (getDate() == transaction.getDate() && getType() == "d") { return true; }
+bool Transaction::operator<(const Transaction& Transaction) const {
+	if (getDate() < Transaction.getDate()) { return true; }
+	else if (getDate() == Transaction.getDate() && getType() == "d") { return true; }
 	else { return false; }
 }
