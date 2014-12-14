@@ -180,7 +180,7 @@ void Bank::welcome_menu() {
 	int day = timePtr->tm_mday;
 	Date System_Date = Date(day, month, year, '/');
 	current_date = System_Date;
-	cout << "--Welcome to Boner Incorporated Banking System--" << endl;
+	cout << "--Welcome to the Michelangelo Banking System--" << endl;
 	cout << "Today's date is " << current_date << endl << endl;
 }
 
@@ -207,6 +207,7 @@ void Bank::main_menu() {
 	cout << "Enter 1 to view your monthly statement." << endl;
 	cout << "Enter 2 to view total of an account." << endl;
 	cout << "Enter 3 to make a payment on your loan." << endl;
+	cout << "Enter 4 to change your password." << endl;
 	cout << "Enter 0 to exit application." << endl;
 	int option = get_input();
 	switch (option) {
@@ -218,7 +219,10 @@ void Bank::main_menu() {
 		customer_total();
 	case 3:
 		customer_payment();
+	case 4:
+		change_password();
 	}
+
 }
 
 
@@ -355,6 +359,51 @@ void Bank::customer_payment() {
 	case 1:
 		customer_payment();
 	}
+}
+
+void Bank::change_password() {
+	string line, old_password, new_password1, new_password2;
+	int customer_id;
+	cout << "Please enter your customer ID: "; cin >> customer_id;
+	cout << "Please enter your old password: "; cin >> old_password;
+	string delete_line = to_string(customer_id) + " " + old_password;
+	if (customer_validification(customer_id, old_password)) {
+		cout << "Please enter your new password: "; cin >> new_password1;
+		cout << "Please enter your new password again for verification: "; cin >> new_password2;
+		if (new_password1 == new_password2){
+			ifstream in("login_information.txt");
+			if (!in.is_open()){
+				cout << "Input file failed to open \n";
+			}
+			ofstream out("outfile.txt");
+			while (getline(in, line)) {
+				if (line != delete_line) {
+					out << line << endl;
+				}
+			}
+			in.close();
+			out.close();
+			// delete original file
+			remove("login_information.txt");
+			// rename old to new
+			rename("outfile.txt", "login_information.txt");
+			// Adds new password to login file
+			fstream newPassword;
+			newPassword.open("login_information.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+			newPassword << customer_id << " " << new_password1;
+			newPassword.close();
+			cout << "--Successfully Changed Password--" << endl;
+		}
+		else {
+			cout << "The passwords you entered to not match please try again" << endl;
+			change_password();
+		}
+	}
+	else {
+		cout << "Invalid customer number/password" << endl;
+		change_password();
+	}
+	main_menu();
 }
 
 //Other Functions

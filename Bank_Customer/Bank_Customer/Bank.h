@@ -57,6 +57,7 @@ public:
 	void print_total();
 	void customer_summary_menu();
 	void customer_payment();
+	void change_password();
 
 private:
 	Date current_date;
