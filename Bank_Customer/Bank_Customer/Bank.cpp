@@ -224,19 +224,6 @@ void Bank::main_menu() {
 
 }
 
-//Customer Info Menu
-void Bank::customer_info_menu() {
-	cout << "--Customer Information Menu--" << endl << endl;
-	vector<Account*>::const_iterator account_iter;
-	vector<Customer*>::const_iterator iter;
-	for (iter = pCustomers.begin();
-		iter != pCustomers.end(); ++iter) {
-		cout << (*iter)->getId() << " " << (*iter)->getSocial() << " " <<
-			(*iter)->getFirst() << " " << (*iter)->getLast() << " " << (*iter)->getAddress() << endl;
-	}
-	main_menu();
-}
-
 //View a statement for an account
 void Bank::print_customer_statements() {
 	int account_number, month, year;
