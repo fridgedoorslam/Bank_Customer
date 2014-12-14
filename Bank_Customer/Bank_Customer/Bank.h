@@ -48,7 +48,7 @@ public:
 	void login_menu();
 	void main_menu();
 	int get_input();
-	bool customer_validification(int, std::string);
+	bool credential_validation(int, std::string);
 	void customer_input_menu();
 	void account_input_menu();
 	void transaction_input_menu();

@@ -156,7 +156,7 @@ void Bank::calculateInterest() {
 	}
 }
 
-bool Bank::customer_validification(int id, string password) {
+bool Bank::credential_validation(int id, string password) {
 	int customer_id;
 	string customer_password;
 	ifstream login_file("login_information.txt");
@@ -196,7 +196,7 @@ void Bank::login_menu() {
 	string customer_password;
 	cout << "Please enter your customer number. "; 	cin >> customer_id;
 	cout << "Please enter your password. ";  cin >> customer_password;
-	if (customer_validification(customer_id, customer_password)) {
+	if (credential_validation(customer_id, customer_password)) {
 		setCurrentUser(customer_id);
 		main_menu();
 	}
@@ -383,7 +383,7 @@ void Bank::change_password() {
 	cout << "Please enter your customer ID: "; cin >> customer_id;
 	cout << "Please enter your old password: "; cin >> old_password;
 	string delete_line = to_string(customer_id) + " " + old_password;
-	if (customer_validification(customer_id, old_password)) {
+	if (credential_validation(customer_id, old_password)) {
 		cout << "Please enter your new password: "; cin >> new_password1;
 		cout << "Please enter your new password again for verification: "; cin >> new_password2;
 		if (new_password1 == new_password2){
