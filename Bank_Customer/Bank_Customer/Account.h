@@ -21,7 +21,7 @@ public:
 	double getBalance();
 	Date getDate() const;
 	std::vector<Transaction*>& getTransactions(); //Changed to const for iter
-	std::vector<Customer*> getOwners();
+	std::vector<Customer*>& getOwners();
 
 	//Setters
 	void setType(int);

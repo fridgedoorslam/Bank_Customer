@@ -9,6 +9,8 @@ const vector<Transaction*>& Bank::getTransactions() const { return pTransactions
 
 Date Bank::getCurrentDate() { return current_date; }
 
+const int Bank::getCurrentUser() const { return current_user; }
+
 //Setters
 void Bank::setCustomer(Customer* Customer) { pCustomers.push_back(Customer); }
 
@@ -17,6 +19,9 @@ void Bank::setAccount(Account* Account) { pAccounts.push_back(Account); }
 void Bank::setTransaction(Transaction* Transaction){ pTransactions.push_back(Transaction); }
 
 void Bank::setCurrentDate(Date currentDate) { current_date = currentDate; }
+
+void Bank::setCurrentUser(int customer_id) { current_user = customer_id; }
+
 
 //File Reading Functions
 
@@ -89,7 +94,7 @@ void Bank::readAssociation() {
 			if ((*customer_iter)->getId() == customer_number) {
 				Customer* pCustomer = (*customer_iter);
 				for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
-					if ((*account_iter)->getNumber() == customer_number) {
+					if ((*account_iter)->getNumber() == account_number) {
 						(*account_iter)->setOwner(pCustomer);
 					}
 				}
@@ -192,6 +197,7 @@ void Bank::login_menu() {
 	cout << "Please enter your customer number. "; 	cin >> customer_id;
 	cout << "Please enter your password. ";  cin >> customer_password;
 	if (customer_validification(customer_id, customer_password)) {
+		setCurrentUser(customer_id);
 		main_menu();
 	}
 	else {
@@ -292,17 +298,27 @@ void Bank::customer_total() {
 	cout << "--View the Total of Your Account--" << endl << endl;
 	cout << "This menu will allow you to view the total of any of your accounts." << endl;
 	int account;
-	double total = 0;
 	cout << "Account to view total of: "; cin >> account;
 	vector<Account*>::const_iterator account_iter;
+	vector<Customer*>::const_iterator customer_iter;
+	bool match = false;
 	for (account_iter = pAccounts.begin();
 		account_iter != pAccounts.end(); ++account_iter) {
 		if ((*account_iter)->getNumber() == account) {
-			total += (*account_iter)->calculate_total();
-			cout << "Account Number: " << (*account_iter)->getNumber() << " " << " Account Total: $" << total << endl << endl;
+			for (customer_iter = (*account_iter)->getOwners().begin();
+				customer_iter != (*account_iter)->getOwners().end();
+				++customer_iter) {
+				if ((*customer_iter)->getId() == current_user) {
+					match = true;
+					double total = (*account_iter)->calculate_total();
+					cout << "Account Number: " << (*account_iter)->getNumber() << " " << " Account Total: $" << total << endl << endl;
+				}
+			}
 		}
 	}
-	cout << "--Successfully Viewed Account Total--" << endl << endl;
+	if (!match) {
+		cout << endl << "You do not own this account or this account does not exist." << endl << endl;
+	}
 	cout << "Enter 1 View Another Total for a Different Account." << endl;
 	cout << "Enter 0 to Return to the Main Menu." << endl;
 	int option = get_input();

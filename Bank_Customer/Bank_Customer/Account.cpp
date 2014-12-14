@@ -19,7 +19,7 @@ int Account::getNumber() const { return account_number; }
 
 double Account::getBalance() { return opening_balance; }
 
-vector<Customer*> Account::getOwners() { return pOwners; }
+vector<Customer*>& Account::getOwners() { return pOwners; }
 
 Date Account::getDate() const { return opening_date; }
 
