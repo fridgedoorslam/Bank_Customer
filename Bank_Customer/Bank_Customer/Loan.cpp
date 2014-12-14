@@ -8,7 +8,6 @@ Loan::Loan(int number, double balance, Date& date, double interestRate) : Accoun
 {
 	type = 4;
 	interest_rate = interestRate;
-
 }
 
 //Getters

@@ -13,6 +13,9 @@ public:
 	//Getters
 	double getInterestRate();
 
+	//Setters
+	void setInterestRate(double);
+
 private:
 	double interest_rate;
 };
