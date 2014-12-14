@@ -24,12 +24,14 @@ public:
 	const std::vector<Account*>& getAccounts() const; //Changed to const for iter
 	const std::vector<Transaction*>& getTransactions() const; //Changed to const for iter
 	Date getCurrentDate();
+	const int getCurrentUser() const;
 
 	//Setters
 	void setCustomer(Customer*);
 	void setAccount(Account*);
 	void setTransaction(Transaction*);
 	void setCurrentDate(Date);
+	void setCurrentUser(int);
 
 	//Read Functions
 	void readCustomers();
@@ -64,6 +66,7 @@ private:
 	std::vector<Customer*> pCustomers;
 	std::vector<Account*> pAccounts;
 	std::vector<Transaction*> pTransactions;
+	int current_user;
 };
 
 #endif
